@@ -16,6 +16,7 @@ stages:
         steps:
           - script: echo 1st_step inside 1st_job inside 1st_stage
       - job: SecondJob
+        dependsOn: FirstJob
         steps:
           - script: |
               echo ankamma
@@ -24,6 +25,7 @@ stages:
               echo Roshan
               echo hai
       - job: ThirdJob
+        dependsOn: SecondJob
         steps:
           - script: |
               echo sampu
@@ -31,9 +33,10 @@ stages:
           - script: |
               echo nilam
               echo ja rahey
-  - stage: SecpmdStage
+  - stage: SecondStage
     jobs:
       - job: FirstJob
+        dependsOn: SecondJob
         steps:
           - script: echo 1st_step inside 1st_job inside 1st_stage
       - job: SecondJob
@@ -45,6 +48,7 @@ stages:
               echo Roshan
               echo hai
       - job: ThirdJob
+        dependsOn: FirstJob
         steps:
           - script: |
               echo sampu
