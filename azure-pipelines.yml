@@ -31,3 +31,24 @@ stages:
           - script: |
               echo nilam
               echo ja rahey
+  - stage: SecpmdStage
+    jobs:
+      - job: FirstJob
+        steps:
+          - script: echo 1st_step inside 1st_job inside 1st_stage
+      - job: SecondJob
+        steps:
+          - script: |
+              echo ankamma
+              echo hai
+          - script: |
+              echo Roshan
+              echo hai
+      - job: ThirdJob
+        steps:
+          - script: |
+              echo sampu
+              echo bye
+          - script: |
+              echo nilam
+              echo ja rahey
