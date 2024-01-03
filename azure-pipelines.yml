@@ -9,50 +9,22 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - name: environments
+    value: sit, uat, prod
+
 stages:
-  - stage: FistStage
-    jobs:
-      - job: FirstJob
-        steps:
-          - script: echo 1st_step inside 1st_job inside 1st_stage
-      - job: SecondJob
-        dependsOn: FirstJob
-        steps:
-          - script: |
-              echo ankamma
-              echo hai
-          - script: |
-              echo Roshan
-              echo hai
-      - job: ThirdJob
-        dependsOn: SecondJob
-        steps:
-          - script: |
-              echo sampu
-              echo bye
-          - script: |
-              echo nilam
-              echo ja rahey
-  - stage: SecondStage
-    jobs:
-      - job: FirstJob
-        dependsOn: SecondJob
-        steps:
-          - script: echo 1st_step inside 1st_job inside 1st_stage
-      - job: SecondJob
-        steps:
-          - script: |
-              echo ankamma
-              echo hai
-          - script: |
-              echo Roshan
-              echo hai
-      - job: ThirdJob
-        dependsOn: FirstJob
-        steps:
-          - script: |
-              echo sampu
-              echo bye
-          - script: |
-              echo nilam
-              echo ja rahey
+  - ${{ each environment in variables.environments}}:
+    - stage: ${{ environment }}
+      displayName: ${{ environment }}
+      ${{ if eq(environment, 'sit')}}:
+        dependsOn: []
+      ${{ if eq(environment, 'uat')}}:
+        dependsOn: sit
+      ${{ if eq(environment, 'prod')}}:
+        dependsOn: uat
+      jobs:
+        - job: FirstJob
+          steps:
+            - script: echo running pipeline for ${{ environment }}
+ 
