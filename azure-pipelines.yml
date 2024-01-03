@@ -14,7 +14,7 @@ variables:
     value: sit, uat, prod
 
 stages:
-  - ${{ each environment in variables.environments}}:
+  - ${{ each environment in split(variables.environments, ', ')}}:
     - stage: ${{ environment }}
       displayName: ${{ environment }}
       ${{ if eq(environment, 'sit')}}:
