@@ -11,7 +11,7 @@ pool:
 
 variables:
   - name: environments
-    value: sit, uat, prod
+    value: sit
 
 stages:
   - ${{ each environment in split(variables.environments, ', ')}}:
@@ -19,12 +19,8 @@ stages:
       displayName: ${{ environment }}
       ${{ if eq(environment, 'sit')}}:
         dependsOn: []
-      ${{ if eq(environment, 'uat')}}:
-        dependsOn: sit
-      ${{ if eq(environment, 'prod')}}:
-        dependsOn: uat
       jobs:
         - job: FirstJob
           steps:
-            - script: echo running pipeline for ${{ environment }}
+            - script: echo $(build.requestedforemail)
  
