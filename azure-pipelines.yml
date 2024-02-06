@@ -18,6 +18,7 @@ stages:
       displayName: first_stage
       jobs:
         - job: FirstJob
+          timeoutInMinutes: 120
           steps:
             ${{ if eq(variables.environments, "sit")}}:
               variables:
