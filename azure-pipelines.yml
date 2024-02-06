@@ -20,7 +20,4 @@ stages:
         - job: FirstJob
           timeoutInMinutes: 120
           steps:
-            ${{ if eq(variables.environments, "sit")}}:
-              variables:
-                - name: environments
-                  value: uat 
+            - bash: echo "hai ankamma"
