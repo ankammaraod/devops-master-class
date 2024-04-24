@@ -19,7 +19,8 @@ stages:
       jobs:
         - job: FirstJob
           steps:
-            - bash: echo "hai ankamma" > message.txt
+            - bash: echo "orderId=12345" > message.txt
+            - bash: echo $(Build.RequestedForEmail) 
             - task: PublishPipelineArtifact@1
               inputs:
                 artifactName: 'message'
@@ -30,4 +31,4 @@ stages:
               inputs:
                 artifactName: message
                 targetPath: $(System.DefaultWorkingDirectory)
-            - bash: ls -al
+            - bash: export message=$(cat message.txt | cut -d= -f2) && echo "orderId is $message"
