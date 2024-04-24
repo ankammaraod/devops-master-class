@@ -18,6 +18,16 @@ stages:
       displayName: first_stage
       jobs:
         - job: FirstJob
-          timeoutInMinutes: 120
           steps:
-            - bash: echo "hai ankamma"
+            - bash: echo "hai ankamma" > message.txt
+            - task: PublishPipelineArtifact@1
+              inputs:
+                artifactName: 'message'
+                targetPath: $(System.DefaultWorkingDirectory)
+        - job: secondJob
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                artifactName: message
+                targetPath: $(System.DefaultWorkingDirectory)
+            - bash: ls -al
