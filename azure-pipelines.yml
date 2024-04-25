@@ -3,9 +3,6 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- master
-
 pool:
   vmImage: ubuntu-latest
 
@@ -26,6 +23,8 @@ stages:
                 artifactName: 'message'
                 targetPath: $(System.DefaultWorkingDirectory)
         - job: secondJob
+          dependsOn: [ FirstJob ]
+          trigger: none
           steps:
             - task: DownloadPipelineArtifact@2
               inputs:
