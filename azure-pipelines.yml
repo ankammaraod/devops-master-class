@@ -1,33 +1,20 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+trigger:
+- main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-variables:
-  - name: environment
-    value: sit
+jobs:
+- job: JobA
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]Hello from JobA"
+    name: SetVarStep
 
-stages:
-    - stage: First_stage
-      displayName: first_stage
-      jobs:
-        - job: FirstJob
-          steps:
-            - bash: echo "orderId=12345" > message.txt
-            - bash: echo $(Build.RequestedForEmail) 
-            - task: PublishPipelineArtifact@1
-              inputs:
-                artifactName: 'message'
-                targetPath: $(System.DefaultWorkingDirectory)
-        - job: secondJob
-          dependsOn: [ FirstJob ]
-          trigger: none
-          steps:
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                artifactName: message
-                targetPath: $(System.DefaultWorkingDirectory)
-            - bash: export message=$(cat message.txt | cut -d= -f2) && echo "orderId is $message"
+- job: JobB
+  dependsOn: JobA
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: echo "The value of the output variable is $(JobA.SetVarStep.myOutputVar)"
