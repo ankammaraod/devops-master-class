@@ -13,17 +13,12 @@ jobs:
         echo "##vso[task.setvariable variable=myvar1;isOutput=true]True"
         echo "##vso[task.setvariable variable=myvar2;isOutput=true]hello"
       name: setvarStep
+
   - job: B
     dependsOn: A
-    variables:
-      myVarFromJobA: $[ dependencies.A.outputs['setvarStep.myvar1'] ]  
-      myVarFromJobA1: $[ dependencies.A.outputs['setvarStep.myvar2'] ]  
     steps:
-    - script: echo $(myVarFromJobA)
-      name: echovar
-    - script: echo $(myVarFromJobA1)
-      name: echovar1
-
+    - script: echo taskb
+      name: taskb
 
   # Map the variable into job B
   - job: C
