@@ -15,13 +15,19 @@ jobs:
       name: setvarStep
   - job: B
     dependsOn: A
+    variables:
+      myVarFromJobA: $[ dependencies.A.outputs['setvarStep.myvar1'] ]  
+      myVarFromJobA1: $[ dependencies.A.outputs['setvarStep.myvar2'] ]  
     steps:
-    - script: echo hello
+    - script: echo $(myVarFromJobA)
       name: echovar
+    - script: echo $(myVarFromJobA1)
+      name: echovar1
+
 
   # Map the variable into job B
   - job: C
-    dependsOn: B
+    dependsOn: [A,B]
     variables:
       myVarFromJobA: $[ dependencies.A.outputs['setvarStep.myvar1'] ]  
       myVarFromJobA1: $[ dependencies.A.outputs['setvarStep.myvar2'] ]  
