@@ -5,16 +5,22 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: JobA
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - script: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]Hello from JobA"
-    name: SetVarStep
-
-- job: JobB
-  dependsOn: JobA
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - script: echo "The value of the output variable is $(JobA.SetVarStep.myOutputVar)"
+  # Set an output variable from job A
+  - job: A
+    steps:
+    - script: |
+        #!/bin/bash        
+        echo "##vso[task.setvariable variable=myvar1;isOutput=true]True"
+        echo "##vso[task.setvariable variable=myvar2;isOutput=true]hello"
+      name: setvarStep
+  # Map the variable into job B
+  - job: B
+    dependsOn: A
+    variables:
+      myVarFromJobA: $[ dependencies.A.outputs['setvarStep.myvar1'] ]  
+      myVarFromJobA1: $[ dependencies.A.outputs['setvarStep.myvar2'] ]  
+    steps:
+    - script: echo $(myVarFromJobA)
+      name: echovar
+    - script: echo $(myVarFromJobA1)
+      name: echovar1
